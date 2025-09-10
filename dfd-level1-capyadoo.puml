@@ -1,0 +1,43 @@
+@startuml CapYaDoo_Level1_DFD
+!theme plain
+skinparam backgroundColor white
+skinparam rectangle {
+    BackgroundColor lightblue
+    BorderColor black
+}
+
+actor "ฐานข้อมูลหลัก" as Admin
+database "ตารางผู้ใช้งาน" as UserDB
+database "ตารางยา" as DrugDB  
+database "ตารางประวัติ" as HistoryDB
+database "ตารางแจ้งเตือน" as NotifDB
+
+rectangle "1.0\nจัดการข้อมูลผู้ใช้" as P1
+rectangle "2.0\nระบบ OCR/Barcode\nและ Text-to-Speech" as P2
+rectangle "3.0\nการจัดการยา" as P3
+rectangle "4.0\nการจัดการแจ้งเตือน" as P4
+rectangle "5.0\nบันทึกประวัติ" as P5
+
+' Input from Admin
+Admin --> P1 : ข้อมูลผู้ใช้
+Admin --> P2 : รูปภาพ/บาร์โค้ด
+Admin --> P3 : การเลือกยา
+Admin --> P4 : การตั้งค่าแจ้งเตือน
+Admin --> P5 : ข้อมูลอาการ
+
+' Output to Admin
+P1 --> Admin : สถานะการเข้าสู่ระบบ\nข้อมูลโปรไฟล์
+P2 --> Admin : ข้อมูลยา\nเสียงพูด
+P3 --> Admin : ตารางเวลา\nการยืนยัน
+P4 --> Admin : การแจ้งเตือน
+P5 --> Admin : สถานะการบันทึก
+
+' Database connections
+P1 <--> UserDB : ข้อมูลผู้ใช้\nการยืนยันตัวตน
+P2 --> DrugDB : ค้นหาข้อมูลยา
+P3 <--> DrugDB : ตารางเวลายา
+P3 --> HistoryDB : ประวัติการทานยา
+P4 <--> NotifDB : การตั้งค่าแจ้งเตือน
+P5 --> HistoryDB : ประวัติและอาการ
+
+@enduml
