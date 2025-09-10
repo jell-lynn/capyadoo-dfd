@@ -1,0 +1,26 @@
+@startuml CapYaDoo_Level2_2_OCR
+!theme plain
+skinparam backgroundColor white
+
+actor "ฐานข้อมูลหลัก" as Admin
+database "Master_Drugs\n(ฐานข้อมูลยา)" as DrugDB
+
+rectangle "2.1\nLogin\n(เข้าสู่ระบบ)" as P21
+rectangle "2.2\nScan barcode\n(สแกนบาร์โค้ด)" as P22
+rectangle "2.3\nExtract text with OCR\n(แยกข้อความด้วย OCR)" as P23
+rectangle "2.4\nRetrieve drug from\nMaster_Drugs\n(ดึงข้อมูลยา)" as P24
+rectangle "2.5\nText-to-Speech\n(แปลงข้อความเป็นเสียง)" as P25
+
+Admin --> P21 : การยืนยันตัวตน
+Admin --> P22 : รูปภาพ/บาร์โค้ด
+P22 --> P23 : ข้อมูลภาพ
+P23 --> P24 : ชื่อยา/รหัส
+P24 --> P25 : รายละเอียดยา
+
+P21 --> Admin : สถานะการเข้าสู่ระบบ
+P25 --> Admin : เสียงพูด
+P24 --> Admin : ข้อมูลยา
+
+P24 <--> DrugDB : ค้นหาข้อมูลยา
+
+@enduml
