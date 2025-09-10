@@ -1,4 +1,4 @@
-@startuml CapYaDoo_Level1_DFD
+@startuml CapYaDoo_Level1_DFD_English
 !theme plain
 skinparam backgroundColor white
 skinparam rectangle {
@@ -6,38 +6,64 @@ skinparam rectangle {
     BorderColor black
 }
 
-actor "ฐานข้อมูลหลัก" as Admin
-database "ตารางผู้ใช้งาน" as UserDB
-database "ตารางยา" as DrugDB  
-database "ตารางประวัติ" as HistoryDB
-database "ตารางแจ้งเตือน" as NotifDB
+' ฐานข้อมูลหลัก = Main Database User
+actor "Main Database User" as Admin
+' ตารางผู้ใช้งาน = User Table
+database "User Table" as UserDB
+' ตารางยา = Drug Table  
+database "Drug Table" as DrugDB  
+' ตารางประวัติ = History Table
+database "History Table" as HistoryDB
+' ตารางแจ้งเตือน = Notification Table
+database "Notification Table" as NotifDB
 
-rectangle "1.0\nจัดการข้อมูลผู้ใช้" as P1
-rectangle "2.0\nระบบ OCR/Barcode\nและ Text-to-Speech" as P2
-rectangle "3.0\nการจัดการยา" as P3
-rectangle "4.0\nการจัดการแจ้งเตือน" as P4
-rectangle "5.0\nบันทึกประวัติ" as P5
+' จัดการข้อมูลผู้ใช้ = Manage User Information
+rectangle "1.0\nManage User\nInformation" as P1
+' ระบบ OCR/Barcode และ Text-to-Speech = OCR/Barcode System and Text-to-Speech
+rectangle "2.0\nOCR/Barcode System\nand Text-to-Speech" as P2
+' การจัดการยา = Medication Management
+rectangle "3.0\nMedication\nManagement" as P3
+' การจัดการแจ้งเตือน = Notification Management
+rectangle "4.0\nNotification\nManagement" as P4
+' บันทึกประวัติ = Record History
+rectangle "5.0\nRecord\nHistory" as P5
 
 ' Input from Admin
-Admin --> P1 : ข้อมูลผู้ใช้
-Admin --> P2 : รูปภาพ/บาร์โค้ด
-Admin --> P3 : การเลือกยา
-Admin --> P4 : การตั้งค่าแจ้งเตือน
-Admin --> P5 : ข้อมูลอาการ
+' ข้อมูลผู้ใช้ = User Information
+Admin --> P1 : User Information
+' รูปภาพ/บาร์โค้ด = Image/Barcode
+Admin --> P2 : Image/Barcode
+' การเลือกยา = Medication Selection
+Admin --> P3 : Medication Selection
+' การตั้งค่าแจ้งเตือน = Notification Settings
+Admin --> P4 : Notification Settings
+' ข้อมูลอาการ = Symptom Data
+Admin --> P5 : Symptom Data
 
 ' Output to Admin
-P1 --> Admin : สถานะการเข้าสู่ระบบ\nข้อมูลโปรไฟล์
-P2 --> Admin : ข้อมูลยา\nเสียงพูด
-P3 --> Admin : ตารางเวลา\nการยืนยัน
-P4 --> Admin : การแจ้งเตือน
-P5 --> Admin : สถานะการบันทึก
+' สถานะการเข้าสู่ระบบ = Login Status, ข้อมูลโปรไฟล์ = Profile Data
+P1 --> Admin : Login Status\nProfile Data
+' ข้อมูลยา = Drug Information, เสียงพูด = Voice Output
+P2 --> Admin : Drug Information\nVoice Output
+' ตารางเวลา = Schedule, การยืนยัน = Confirmation
+P3 --> Admin : Schedule\nConfirmation
+' การแจ้งเตือน = Notification Alerts
+P4 --> Admin : Notification Alerts
+' สถานะการบันทึก = Recording Status
+P5 --> Admin : Recording Status
 
 ' Database connections
-P1 <--> UserDB : ข้อมูลผู้ใช้\nการยืนยันตัวตน
-P2 --> DrugDB : ค้นหาข้อมูลยา
-P3 <--> DrugDB : ตารางเวลายา
-P3 --> HistoryDB : ประวัติการทานยา
-P4 <--> NotifDB : การตั้งค่าแจ้งเตือน
-P5 --> HistoryDB : ประวัติและอาการ
+' ข้อมูลผู้ใช้ = User Data, การยืนยันตัวตน = Authentication
+P1 <--> UserDB : User Data\nAuthentication
+' ค้นหาข้อมูลยา = Drug Information Search
+P2 --> DrugDB : Drug Information Search
+' ตารางเวลายา = Medication Schedule
+P3 <--> DrugDB : Medication Schedule
+' ประวัติการทานยา = Medication History
+P3 --> HistoryDB : Medication History
+' การตั้งค่าแจ้งเตือน = Notification Settings
+P4 <--> NotifDB : Notification Settings
+' ประวัติและอาการ = History and Symptoms
+P5 --> HistoryDB : History and Symptoms
 
 @enduml
