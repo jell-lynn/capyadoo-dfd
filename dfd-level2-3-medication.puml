@@ -1,0 +1,29 @@
+@startuml CapYaDoo_Level2_3_Medication
+!theme plain
+skinparam backgroundColor white
+
+actor "ฐานข้อมูลหลัก" as Admin
+database "ตารางยา" as MedDB
+database "ตารางประวัติ" as HistoryDB
+
+rectangle "3.1\nLogin\n(เข้าสู่ระบบ)" as P31
+rectangle "3.2\nSelect Medication to Take\n(เลือกยาที่จะทาน)" as P32
+rectangle "3.3\nCheck related schedule\n(ตรวจสอบตารางเวลา)" as P33
+rectangle "3.4\nConfirm medication taken\n(ยืนยันการทานยา)" as P34
+rectangle "3.5\nRecord in histories table\n(บันทึกในตารางประวัติ)" as P35
+
+Admin --> P31 : การยืนยันตัวตน
+Admin --> P32 : การเลือกยา
+P32 --> P33 : ข้อมูลยา
+P33 --> Admin : ข้อมูลตารางเวลา
+Admin --> P34 : การยืนยัน
+P34 --> P35 : บันทึกยา
+
+P31 --> Admin : สถานะการเข้าสู่ระบบ
+P35 --> Admin : สถานะการบันทึก
+
+P32 <--> MedDB : ข้อมูลยา
+P33 <--> MedDB : ข้อมูลตารางเวลา
+P35 --> HistoryDB : รายการประวัติ
+
+@enduml
