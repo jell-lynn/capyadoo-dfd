@@ -1,0 +1,27 @@
+@startuml CapYaDoo_Level2_4_Notification
+!theme plain
+skinparam backgroundColor white
+
+actor "ฐานข้อมูลหลัก" as Admin
+database "ตารางแจ้งเตือน" as NotifDB
+database "ตารางตารางเวลา" as ScheduleDB
+
+rectangle "4.1\nLogin\n(เข้าสู่ระบบ)" as P41
+rectangle "4.2\nSet notification time\n(ตั้งเวลาแจ้งเตือน)" as P42
+rectangle "4.3\nSave notification in\nschedule table\n(บันทึกการแจ้งเตือน)" as P43
+rectangle "4.4\nTrigger Notification to user\n(ส่งการแจ้งเตือนให้ผู้ใช้)" as P44
+
+Admin --> P41 : การยืนยันตัวตน
+Admin --> P42 : การตั้งค่าแจ้งเตือน
+P42 --> P43 : ข้อมูลแจ้งเตือน
+P43 --> P44 : ทริกเกอร์ตารางเวลา
+
+P41 --> Admin : สถานะการเข้าสู่ระบบ
+P42 --> Admin : การยืนยันการตั้งค่า
+P44 --> Admin : การแจ้งเตือน
+
+P42 <--> NotifDB : การกำหนดค่าแจ้งเตือน
+P43 --> ScheduleDB : ข้อมูลตารางเวลา
+P44 <--> ScheduleDB : ข้อมูลทริกเกอร์
+
+@enduml
