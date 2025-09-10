@@ -1,30 +1,62 @@
-name: Generate PlantUML Images
+name: PlantUML to PNG
 
 on:
   push:
     paths:
       - '**.puml'
-  workflow_dispatch:
+    branches: [ main, master ]
+  pull_request:
+    paths:
+      - '**.puml'
+    branches: [ main, master ]
 
 jobs:
-  generate:
+  plantuml:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      
+    
     steps:
-    - name: Checkout
+    - name: Checkout repository
       uses: actions/checkout@v4
-      
-    - name: Generate PlantUML images
-      uses: holowinski/plantuml-github-action@main
       with:
-        args: -v -tpng **/*.puml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
         
-    - name: Commit and push images
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+        
+    - name: Download PlantUML
+      run: |
+        wget https://github.com/plantuml/plantuml/releases/latest/download/plantuml-1.2024.6.jar -O plantuml.jar
+        
+    - name: Generate PNG from PlantUML
+      run: |
+        java -jar plantuml.jar -tpng *.puml
+        
+    - name: List generated files
+      run: |
+        ls -la *.png || echo "No PNG files generated"
+        
+    - name: Configure Git
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add -A
-        git diff --staged --quiet || git commit -m "Generated PlantUML images"
-        git push
+        
+    - name: Add generated PNG files
+      run: |
+        git add *.png || echo "No PNG files to add"
+        
+    - name: Commit generated files
+      run: |
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Auto-generated PNG files from PlantUML [skip ci]"
+        fi
+        
+    - name: Push changes
+      if: github.event_name == 'push'
+      run: |
+        git push origin ${{ github.ref_name }}
