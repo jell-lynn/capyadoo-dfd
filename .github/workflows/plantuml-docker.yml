@@ -1,0 +1,35 @@
+name: PlantUML with Docker
+
+on:
+  push:
+    paths:
+      - '**.puml'
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Generate PlantUML diagrams
+      run: |
+        docker run --rm -v ${PWD}:/data plantuml/plantuml:latest -tpng /data/*.puml
+        echo "Generated files:"
+        ls -la *.png || echo "No PNG files found"
+        
+    - name: Commit generated images
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add *.png || true
+        if ! git diff --staged --quiet; then
+          git commit -m "Auto-generated PlantUML images [skip ci]"
+          git push
+        else
+          echo "No changes to commit"
+        fi
