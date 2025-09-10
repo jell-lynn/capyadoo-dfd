@@ -1,0 +1,26 @@
+@startuml CapYaDoo_Level2_5_History
+!theme plain
+skinparam backgroundColor white
+
+actor "ฐานข้อมูลหลัก" as Admin
+database "ตารางประวัติ" as HistoryDB
+database "ตารางยา" as MedDB
+
+rectangle "5.1\nLogin\n(เข้าสู่ระบบ)" as P51
+rectangle "5.2\nSelect medication to take\n(เลือกยาที่จะทาน)" as P52
+rectangle "5.3\nInput symptoms\n(ป้อนข้อมูลอาการ)" as P53
+rectangle "5.4\nStore in histories table\n(เก็บในตารางประวัติ)" as P54
+
+Admin --> P51 : การยืนยันตัวตน
+Admin --> P52 : การเลือกยา
+Admin --> P53 : ข้อมูลอาการ
+P52 --> P54 : ข้อมูลยา
+P53 --> P54 : ข้อมูลอาการ
+
+P51 --> Admin : สถานะการเข้าสู่ระบบ
+P54 --> Admin : สถานะการจัดเก็บ
+
+P52 <--> MedDB : ข้อมูลยา
+P54 --> HistoryDB : บันทึกประวัติ
+
+@enduml
